@@ -1,0 +1,36 @@
+.post {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 70%;
+    height: auto;
+}
+
+.post img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.post .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.post .buttons button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+
+.post .buttons button:hover {
+    background-color: #ddd;
+}
