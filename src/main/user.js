@@ -35,6 +35,9 @@ function UserProfile(props) {
       </div>
 
       <div className="sidebar">
+        <h5 style={{ alignSelf: "center" }}>
+          Add the IDs of JSON Placeholder Users
+        </h5>
         {followedUsers &&
           followedUsers.map((user) => (
             <div key={user?.id} className="avatar-box">
