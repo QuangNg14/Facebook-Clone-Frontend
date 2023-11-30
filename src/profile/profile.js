@@ -60,14 +60,17 @@ function Profile() {
   const handleUpdateInfo = async () => {
     const updateUserInfo = async (endpoint, data) => {
       try {
-        const response = await fetch(`http://localhost:3000/${endpoint}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(data),
-        });
+        const response = await fetch(
+          `https://ricecomp431app-5b7591b01f3b.herokuapp.com/${endpoint}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(data),
+          }
+        );
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -138,11 +141,14 @@ function Profile() {
     const formData = new FormData();
     formData.append("image", selectedFile);
     try {
-      const response = await fetch("http://localhost:3000/avatar", {
-        method: "PUT",
-        credentials: "include",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://ricecomp431app-5b7591b01f3b.herokuapp.com/avatar",
+        {
+          method: "PUT",
+          credentials: "include",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
       setImageURL(data?.avatar);
@@ -165,7 +171,7 @@ function Profile() {
       if (userFromLocalStorage) {
         try {
           const response = await fetch(
-            `http://localhost:3000/userprofile/${userFromLocalStorage}`
+            `https://ricecomp431app-5b7591b01f3b.herokuapp.com/userprofile/${userFromLocalStorage}`
           );
           if (response.ok) {
             const userData = await response.json();

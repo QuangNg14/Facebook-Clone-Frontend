@@ -21,14 +21,17 @@ function UserProfile(props) {
       }
 
       // API call to update the headline
-      const response = await fetch("http://localhost:3000/headline", {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ headline: inputValue }),
-      });
+      const response = await fetch(
+        "https://ricecomp431app-5b7591b01f3b.herokuapp.com/headline",
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ headline: inputValue }),
+        }
+      );
 
       const data = await response.json();
 
@@ -55,13 +58,16 @@ function UserProfile(props) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/followed-users", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "https://ricecomp431app-5b7591b01f3b.herokuapp.com/followed-users",
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch followedUsers");

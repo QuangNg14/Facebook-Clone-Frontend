@@ -106,9 +106,12 @@ const Main = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const response = await fetch("http://localhost:3000/current_user", {
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://ricecomp431app-5b7591b01f3b.herokuapp.com/current_user",
+        {
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -127,7 +130,7 @@ const Main = () => {
       if (userFromLocalStorage) {
         try {
           const response = await fetch(
-            `http://localhost:3000/userprofile/${userFromLocalStorage}`
+            `https://ricecomp431app-5b7591b01f3b.herokuapp.com/userprofile/${userFromLocalStorage}`
           );
           if (response.ok) {
             const userData = await response.json();
@@ -147,13 +150,16 @@ const Main = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/articles", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "https://ricecomp431app-5b7591b01f3b.herokuapp.com/articles",
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch articles");
@@ -171,13 +177,16 @@ const Main = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:3000/all-users", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "https://ricecomp431app-5b7591b01f3b.herokuapp.com/all-users",
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -218,14 +227,17 @@ const Main = () => {
         // Include any other necessary fields
       };
 
-      const response = await fetch("http://localhost:3000/article", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(articleData),
-      });
+      const response = await fetch(
+        "https://ricecomp431app-5b7591b01f3b.herokuapp.com/article",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(articleData),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -259,7 +271,7 @@ const Main = () => {
     if (!followedUsers.some((user) => user.username === newUsername)) {
       try {
         const response = await fetch(
-          `http://localhost:3000/following/${newUsername}`,
+          `https://ricecomp431app-5b7591b01f3b.herokuapp.com/following/${newUsername}`,
           {
             method: "PUT",
             credentials: "include",
@@ -290,7 +302,7 @@ const Main = () => {
   const handleUnfollow = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/following/${userId}`,
+        `https://ricecomp431app-5b7591b01f3b.herokuapp.com/following/${userId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -314,14 +326,17 @@ const Main = () => {
 
   const createArticle = async (articleData) => {
     try {
-      const response = await fetch("http://localhost:3000/article", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(articleData),
-      });
+      const response = await fetch(
+        "https://ricecomp431app-5b7591b01f3b.herokuapp.com/article",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(articleData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to create article: ${response.status}`);

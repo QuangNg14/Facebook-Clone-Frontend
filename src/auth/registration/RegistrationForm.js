@@ -78,19 +78,22 @@ const RegistrationForm = () => {
 
     if (validate()) {
       try {
-        const response = await fetch("http://localhost:3000/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: formData.username,
-            password: formData.password,
-            email: formData.email,
-            phone: formData.phone,
-            zipcode: formData.zipcode,
-          }),
-        });
+        const response = await fetch(
+          "https://ricecomp431app-5b7591b01f3b.herokuapp.com/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: formData.username,
+              password: formData.password,
+              email: formData.email,
+              phone: formData.phone,
+              zipcode: formData.zipcode,
+            }),
+          }
+        );
 
         if (response.ok) {
           const result = await response.json();
@@ -133,17 +136,20 @@ const RegistrationForm = () => {
     // } else {
     // setLoginState("error");
     try {
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: loginData.username,
-          password: loginData.password,
-        }),
-      });
+      const response = await fetch(
+        "https://ricecomp431app-5b7591b01f3b.herokuapp.com/login",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: loginData.username,
+            password: loginData.password,
+          }),
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();
@@ -292,7 +298,7 @@ const RegistrationForm = () => {
             ))}
           </Form>
           <div style={{ marginTop: 20 }}>
-            <a href="http://localhost:3000/auth/google">
+            <a href="https://ricecomp431app-5b7591b01f3b.herokuapp.com/auth/google">
               <Button>Login with Google</Button>
             </a>
           </div>

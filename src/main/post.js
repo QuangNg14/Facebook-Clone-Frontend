@@ -37,7 +37,7 @@ function Post(props) {
       };
 
       const response = await fetch(
-        `http://localhost:3000/articles/${props.id}`,
+        `https://ricecomp431app-5b7591b01f3b.herokuapp.com/articles/${props.id}`,
         {
           method: "PUT",
           headers: {
@@ -70,7 +70,7 @@ function Post(props) {
       };
 
       const response = await fetch(
-        `http://localhost:3000/articles/${articleId}`,
+        `https://ricecomp431app-5b7591b01f3b.herokuapp.com/articles/${articleId}`,
         {
           method: "PUT",
           headers: {
