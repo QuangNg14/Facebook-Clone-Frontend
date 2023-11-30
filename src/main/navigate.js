@@ -4,16 +4,14 @@ import { Link } from "react-router-dom";
 const NavigateComponent = ({ handleLogout }) => {
   return (
     <div>
-      <button className="link-button">
-        <Link to="/profile" className="link-text">
-          Profile
-        </Link>
-      </button>
-      <button className="link-button" data-testid="logout-button">
-        <Link to="/" className="link-text" onClick={handleLogout}>
+      <Link to="/profile" className="link-text">
+        <button className="link-button">Profile</button>
+      </Link>
+      <Link to="/" className="link-text" onClick={handleLogout}>
+        <button className="link-button" data-testid="logout-button">
           Logout
-        </Link>
-      </button>
+        </button>
+      </Link>
     </div>
   );
 };

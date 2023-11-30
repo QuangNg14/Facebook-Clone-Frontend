@@ -2,28 +2,89 @@ import React, { useState, useEffect } from "react";
 import "./user.css";
 
 function UserProfile(props) {
-  const { followedUsers, setFollowedUsers, handleUnfollow } = props;
-  const [statusHeadline, setStatusHeadline] = useState("Hello world");
+  const {
+    currentUser,
+    followedUsers,
+    setFollowedUsers,
+    handleUnfollow,
+    followError,
+    followUpdateTrigger,
+  } = props;
+  const [statusHeadline, setStatusHeadline] = useState(currentUser?.headline);
   const [inputValue, setInputValue] = useState("");
 
-  const handleUpdateStatus = () => {
-    setStatusHeadline(inputValue);
+  const handleUpdateStatus = async () => {
+    try {
+      // Check if the input value is not empty
+      if (!inputValue.trim()) {
+        throw new Error("Headline is required");
+      }
+
+      // API call to update the headline
+      const response = await fetch("http://localhost:3000/headline", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ headline: inputValue }),
+      });
+
+      const data = await response.json();
+
+      // Check for a successful response
+      if (!response.ok) {
+        throw new Error(data.message || "Error updating headline");
+      }
+
+      // Update the local state with the new headline
+      setStatusHeadline(inputValue);
+
+      // Optionally, you can handle the success case (e.g., showing a success message)
+      console.log("Headline updated:", data);
+    } catch (error) {
+      // Handle any errors
+      console.error("Error updating headline:", error);
+      // Optionally, update the state to show an error message
+    }
+
+    // Clear the input field
     setInputValue("");
   };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/followed-users", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch followedUsers");
+        }
+
+        const result = await response.json();
+        setFollowedUsers(result?.followedUsers);
+      } catch (error) {
+        console.error("There was an error fetching the data!", error);
+      }
+    };
+    fetchPosts();
+  }, [setFollowedUsers, followUpdateTrigger]);
 
   return (
     <div>
       <div className="profile">
         <div className="avatar-box">
-          <img
-            src="https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg"
-            alt="User Avatar"
-            className="avatar"
-          />
+          <img src={currentUser?.avatar} alt="User Avatar" className="avatar" />
         </div>
         <div className="user-info">
-          <h2>Username</h2>
-          <p>{statusHeadline}</p>
+          <h2>{currentUser?.username}</h2>
+          <p>{statusHeadline || currentUser?.headline}</p>
           <input
             type="text"
             value={inputValue}
@@ -36,21 +97,35 @@ function UserProfile(props) {
 
       <div className="sidebar">
         <h5 style={{ alignSelf: "center" }}>
-          Add the IDs of JSON Placeholder Users
+          Add the username of the user you want to follow
         </h5>
+        {followError && (
+          <div
+            style={{
+              color: "red",
+              padding: "10px",
+              margin: "10px 0",
+              textAlign: "center",
+              borderRadius: "5px",
+              fontWeight: "bold",
+            }}
+          >
+            {followError}
+          </div>
+        )}
         {followedUsers &&
           followedUsers.map((user) => (
-            <div key={user?.id} className="avatar-box">
+            <div key={user?._id} className="avatar-box">
               <img
                 src="https://learn.corel.com/wp-content/uploads/2022/01/alberta-2297204_1280.jpg"
-                alt={`${user?.name} Avatar`}
+                alt={`${user?.username} Avatar`}
                 className="avatar"
               />
-              <h3>{user?.name}</h3>
-              <p>{user?.company.bs}</p>{" "}
+              <h3>{user?.username}</h3>
+              <p>{statusHeadline}</p>{" "}
               <button
                 data-testid="unfollow-user-button"
-                onClick={() => handleUnfollow(user?.id)}
+                onClick={() => handleUnfollow(user?.user)}
               >
                 Unfollow
               </button>

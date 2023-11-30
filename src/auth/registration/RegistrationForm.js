@@ -14,14 +14,21 @@ const RegistrationForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [successRegister, setSuccessRegister] = useState(false);
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
   });
 
-  const [setUser, registeredUsers, setRegisteredUsers, setLoginState] =
-    useContext(UserContext);
+  const [
+    user,
+    setUser,
+    registeredUsers,
+    setRegisteredUsers,
+    loginState,
+    setLoginState,
+  ] = useContext(UserContext);
 
   const [loginErrors, setLoginErrors] = useState({});
 
@@ -67,19 +74,37 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("https://jsonplaceholder.typicode.com/users");
-    const users = await response.json();
+    setSuccessRegister("");
 
-    const userExists = users.find((user) => user.name === formData.username);
-    if (userExists) {
-      setLoginErrors({ general: "JSON user already registered" });
-    } else if (validate()) {
-      setRegisteredUsers([...registeredUsers, formData]);
-      // setUser(formData);
-      // setLoginState("loggedIn");
-      localStorage.setItem("loginState", "loggedIn");
-      localStorage.setItem("loginUser", JSON.stringify(formData));
-      navigate("/main");
+    if (validate()) {
+      try {
+        const response = await fetch("http://localhost:3000/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: formData.username,
+            password: formData.password,
+            email: formData.email,
+            phone: formData.phone,
+            zipcode: formData.zipcode,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          // Handle success - possibly update state, store user data, redirect, etc.
+          localStorage.setItem("loginState", "loggedIn");
+          localStorage.setItem("loginUser", formData.username);
+          // navigate("/main");
+          setSuccessRegister("Successfully Resgistered");
+        } else {
+          throw new Error("Registration failed");
+        }
+      } catch (error) {
+        setLoginErrors({ general: error.message });
+      }
     }
   };
 
@@ -93,25 +118,51 @@ const RegistrationForm = () => {
 
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch(
-      "https://jsonplaceholder.typicode.com/users?username=" +
-        loginData.username
-    );
-    const users = await res?.json();
+    // const res = await fetch(
+    //   "https://jsonplaceholder.typicode.com/users?username=" +
+    //     loginData.username
+    // );
+    // const users = await res?.json();
 
-    if (users.length > 0 && users[0].address.street === loginData.password) {
-      let loggedInUser = users[0];
-      localStorage.setItem("loginState", "loggedIn");
-      localStorage.setItem("loginUser", JSON.stringify(loggedInUser));
-      navigate("/main");
-    } else {
-      // setLoginState("error");
-      localStorage.setItem("loginState", "error");
-      setLoginErrors({
-        general:
-          "Invalid username or password. Password should be the address street name",
+    // if (users.length > 0 && users[0].address.street === loginData.password) {
+    //   let loggedInUser = users[0];
+    //   console.log(loggedInUser);
+    //   localStorage.setItem("loginState", "loggedIn");
+    //   localStorage.setItem("loginUser", JSON.stringify(loggedInUser));
+    //   navigate("/main");
+    // } else {
+    // setLoginState("error");
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: loginData.username,
+          password: loginData.password,
+        }),
       });
+
+      if (response.ok) {
+        const result = await response.json();
+        localStorage.setItem("loginState", "loggedIn");
+        localStorage.setItem("loginUser", loginData.username);
+        // localStorage.setItem("loginUser", JSON.stringify(result));
+        navigate("/main");
+      } else {
+        throw new Error("Login failed");
+      }
+    } catch (error) {
+      localStorage.setItem("loginState", "error");
+      setLoginErrors({ general: error.message });
     }
+    // setLoginErrors({
+    //   general:
+    //     "Invalid username or password. Password should be the address street name",
+    // });
+    // }
   };
 
   return (
@@ -201,6 +252,9 @@ const RegistrationForm = () => {
                 {errors[key]}
               </div>
             ))}
+            {successRegister && (
+              <div style={{ color: "green" }}>{successRegister}</div>
+            )}
           </Form>
         </Col>
         <Col md={6}>
@@ -237,10 +291,13 @@ const RegistrationForm = () => {
               </div>
             ))}
           </Form>
+          <div style={{ marginTop: 20 }}>
+            <a href="http://localhost:3000/auth/google">
+              <Button>Login with Google</Button>
+            </a>
+          </div>
         </Col>
       </Row>
-      {/* <div data-testid="login-state">{loginState}</div>
-      <div data-testid="login-errors">{loginErrors.general}</div> */}
     </Container>
   );
 };
