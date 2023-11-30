@@ -4,7 +4,7 @@
 I am using 2 slip days \
 Test User: \
 Username: testFollowing6 \
-Password: 12345678 \
+Password: 12345678
 
 All users usernames: \
 testregister4 \
@@ -13,6 +13,6 @@ testFollowing2 \
 testFollowing3 \
 testFollowing4 \
 testFollowing5 \
-testFollowing7 \
+testFollowing7
 
-Password: 12345678
+Password for all users: 12345678
